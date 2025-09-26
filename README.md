@@ -1,6 +1,6 @@
 # Hello 5I
 
 ```
-console.log('hey');
+console.log('yo');
 ```
 
