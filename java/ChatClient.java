@@ -10,8 +10,8 @@ public class ChatClient {
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(sock.getInputStream())
             );
-            DataOutputStream out = new DataOutputStream(
-                sock.getOutputStream()
+            BufferedWriter out = new BufferedWriter(
+                new OutputStreamWriter(sock.getOutputStream())
             );
             BufferedReader tastiera = new BufferedReader(
                 new InputStreamReader(System.in)
@@ -22,7 +22,7 @@ public class ChatClient {
                 while (true) {
                     try {
                         String msg = in.readLine();
-                        // if (msg == null) break;
+                        if (msg == null) break;
                         System.out.println(msg);
                     } catch (IOException | NoSuchElementException e) {
                         System.out.println(e.getMessage());
@@ -34,7 +34,7 @@ public class ChatClient {
             // manda al server i messaggi inseriti da tastiera
             String msgToServer = tastiera.readLine();
             while (!msgToServer.equals("/exit")) {
-                out.writeBytes(msgToServer + "\n");
+                out.write(msgToServer + "\n"); out.flush();
                 msgToServer = tastiera.readLine();
             }
         } catch (IOException e) {

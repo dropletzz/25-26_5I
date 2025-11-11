@@ -13,34 +13,41 @@ public class ChatServer {
         ServerSocket server = new ServerSocket(PORT);
         System.out.println("In ascolto sulla porta " + PORT);
 
-        // thread principale che accetta connessioni TCP
-        new Thread(() -> {
-            while (true) {
-                try {
-                    Socket sock = server.accept();
-                    synchronized (clients) { clients.add(sock); }
-                    // per ogni client che si connette faccio partire un thread
-                    startClientThread(sock, clients);
-                    System.out.println("Nuovo client: " + sock.getRemoteSocketAddress());
-                } catch (IOException e) {
-                    System.out.println("Errore accept: " + e.getMessage());
-                }
+        // thread principale (main thread)
+        // accetta nuove connessioni TCP e fa partire
+        // un thread per ogni client che si collega
+        while (true) {
+            try {
+                Socket sock = server.accept();
+                synchronized (clients) { clients.add(sock); }
+                // per ogni client che si connette faccio partire un thread
+                startClientThread(sock, clients);
+                System.out.println("Nuovo client: " + sock.getRemoteSocketAddress());
+            } catch (IOException e) {
+                System.out.println("Errore accept: " + e.getMessage());
+                break;
             }
-        }).start();
+        }
+
+        server.close();
     }
 
     private static void startClientThread(Socket sock, List<Socket> clients) {
         new Thread(() -> {
             try (
                     BufferedReader in = new BufferedReader(
-                            new InputStreamReader(sock.getInputStream()));
-                    DataOutputStream out = new DataOutputStream(
-                            sock.getOutputStream());
+                        new InputStreamReader(sock.getInputStream()));
+                    BufferedWriter out = new BufferedWriter(
+                        new OutputStreamWriter(sock.getOutputStream()));
             ) {
                 // chiedo al client il suo nome
-                out.writeBytes("Come ti chiami?\n");
+                out.write("Come ti chiami?\n"); out.flush();
+                // out.flush() serve per garantire che i dati passati alla write
+                // vengano mandati immediatamente sul socket (normalmente BufferedWriter
+                // aspetta che il buffer sia pieno prima di mandare i dati)
+
                 String name = in.readLine();
-                out.writeBytes("Ciao " + name + ", benvenuto nella chat!\n");
+                out.write("Ciao " + name + ", benvenuto nella chat!\n"); out.flush();
 
                 // ogni volta che ricevo un messaggio da un client
                 // lo inoltro a tutti gli altri client
@@ -62,8 +69,9 @@ public class ChatServer {
         synchronized (clients) {
             for (Socket receiver : clients) {
                 if (!receiver.equals(sender)) {
-                    DataOutputStream out = new DataOutputStream(receiver.getOutputStream());
-                    out.writeBytes(msg + "\n");
+                    BufferedWriter out = new BufferedWriter(
+                        new OutputStreamWriter(receiver.getOutputStream()));
+                    out.write(msg + "\n"); out.flush();
                 }
             }
         }
