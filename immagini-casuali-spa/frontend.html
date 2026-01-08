@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <title>SPA immagini</title>
+        <style>
+            .contenitore-immagine {
+                text-align: center;
+                height: 70vh;
+                margin: 20px;
+            }
+            #immagine {
+                height: 100%;
+            }
+
+            .azioni {
+                display: flex;
+                justify-content: center;
+            }
+            .azioni .bottone {
+                background-color:darkseagreen;
+                font-weight: 600;
+                font-size: 25px;
+                margin: 10px;
+                padding: 15px;
+                border-radius: 8px;
+                cursor: pointer;
+                user-select: none;
+                border: 2px solid transparent;
+            }
+            .azioni .bottone:hover {
+                border: 2px solid #777;
+            }
+
+            .cornice {
+                margin: 25px;
+                padding: 25px;
+                padding-top: 0px;
+                border: 4px solid #373737;
+                border-radius: 10px;
+                background-color: #DEDEDE;
+            }
+            #immagini-salvate {
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+            #immagini-salvate img {
+                height: 250px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="contenitore-immagine">
+            <img id="immagine" src="https://cataas.com/cat/sdSmAsEB45187tIM?position=center" alt="">
+        </div>
+
+        <div class="azioni">
+            <div id="nuova-img" class="bottone">Nuova immagine</div>
+            <div id="salva-img" class="bottone">Salva</div>
+        </div>
+
+        <div class="cornice">
+            <h1>Immagini salvate</h1>
+            <div id="immagini-salvate">
+            </div>
+        </div>
+
+        <script>
+            const btnNuova = document.getElementById("nuova-img");        
+            const btnSalva = document.getElementById("salva-img");
+            const img = document.getElementById("immagine");       
+            const imgSalvate = document.getElementById("immagini-salvate");
+
+            const nuovaImmagineRandom = async () => {
+                const res = await fetch("https://cataas.com/cat?json=true");
+                const body = await res.json();
+                img.src = body.url;
+            }
+
+            nuovaImmagineRandom();
+            btnNuova.addEventListener("click", nuovaImmagineRandom);
+        </script>
+    </body>
+
+</html>
