@@ -1,8 +1,8 @@
 # SPA immagini casuali
 
 Una SPA (single page application) composta da:
-* **frontend** => composto da un unico file: [frontend.html](https://github.com/dropletzz/25-26_5I/blob/main/immagini-casuali-spa/frontend.html)
-* **backend** => server HTTP implementato in Node.js che utilizza un DB MySQL, espone le API per gestire una risorsa REST, sta nella cartella [webserver](https://github.com/dropletzz/25-26_5I/tree/main/immagini-casuali-spa/webserver)
+* **frontend** => composto da un unico file: [frontend.html](./frontend.html)
+* **backend** => server HTTP implementato in Node.js che utilizza un DB MySQL, espone le API per gestire una risorsa REST, sta nella cartella [webserver](./webserver)
 
 
 ## Istruzioni per l'uso
@@ -29,7 +29,7 @@ Installare Node.js e un database MySQL (ad esempio con Laragon).
 
 Database:
 * Far partire il server MySQL sulla porta 3306
-* Creare il db eseguendo lo script [create-db.sql](https://github.com/dropletzz/25-26_5I/blob/main/immagini-casuali-spa/create-db.sql)
+* Creare il db eseguendo lo script [create-db.sql](./create-db.sql)
 
 Webserver:
 * Aprire un terminale, spostarsi nella cartella 'webserver' ed eseguire i seguenti comandi:
